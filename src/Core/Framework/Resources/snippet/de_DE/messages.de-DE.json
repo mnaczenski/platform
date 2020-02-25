@@ -36,7 +36,7 @@
             "tax": "zzgl. %taxRate%% MwSt.:",
             "total": "Gesamtsumme:",
             "totalNet": "Gesamtsumme (Netto):",
-            "shippingCosts": "Versandkosten:"
+            "shippingCosts": "Versandkosten"
         },
         "paymentShippingInfo": {
             "paymentMethod": "Gewählte Zahlungsart %paymentMethod%",

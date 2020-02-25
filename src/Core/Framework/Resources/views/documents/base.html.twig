@@ -275,6 +275,37 @@
                                         {% endblock %}
                                     </tr>
                                 {% endfor %}
+                                {% block document_line_item_table_custom %}
+                                {% endblock %}
+                                {% block document_line_item_table_shipping %}
+                                    {% if loop.last == true %}
+                                        <tr class="line-item">
+                                            {% block document_line_item_table_shipping_position %}
+                                                {% if config.displayLineItemPosition %}
+                                                    <td>{{ loop.index }}</td>
+                                                {% endif %}
+                                            {% endblock %}
+                                            {% block document_line_item_table_shipping_number %}
+                                                <td>{{ 'document.lineItems.shippingCosts'|trans|sw_sanitize }}</td>
+                                            {% endblock %}
+                                            {% block document_line_item_table_shipping_label %}
+                                                <td class="line-item-breakable">{{ order.deliveries.first.shippingMethod.name }}</td>
+                                            {% endblock %}
+                                            {% block document_line_item_table_shipping_quantity %}
+                                                <td class="align-right">1</td>
+                                            {% endblock %}
+                                            {% block document_line_item_table_shipping_tax %}
+                                                <td class="align-right">{% for tax in order.deliveries.first.shippingCosts.calculatedTaxes %}{{ tax.taxRate }}%{% if loop.last %}{% else %}<br>{% endif %}{% endfor %}</td>
+                                            {% endblock %}
+                                            {% block document_line_item_table_unit_price %}
+                                                <td class="align-right">{{ order.deliveries.first.shippingCosts.unitPrice|currency(currencyIsoCode) }}</td>
+                                            {% endblock %}
+                                            {% block document_line_item_table_total_price %}
+                                                <td class="align-right">{{ order.deliveries.first.shippingCosts.totalPrice|currency(currencyIsoCode) }}</td>
+                                            {% endblock %}
+                                        </tr>
+                                    {% endif %}
+                                {% endblock %}
                             </table>
                         {% endblock %}
                     </div>
@@ -304,9 +335,11 @@
                                     {% deprecated 'The "document_sum_shipping_costs" block is deprecated, use "document_line_item_table_shipping" instead.' %}
                                     <tr>
                                         {% block document_sum_shipping_costs_label %}
+                                            <td></td>
                                             {% deprecated 'The "document_sum_shipping_costs_label" block is deprecated, use "document_line_item_table_shipping_label" instead.' %}
                                         {% endblock %}
                                         {% block document_sum_shipping_costs_price %}
+                                            <td></td>
                                             {% deprecated 'The "document_sum_shipping_costs_price" block is deprecated, use "document_line_item_table_shipping_price" instead.' %}
                                         {% endblock %}
                                     </tr>
@@ -345,10 +378,10 @@
                 <div class="payment-shipping-container">
                     {% block document_payment_shipping_inner %}
                         {% block document_payment %}
-                            {{ 'document.paymentShippingInfo.paymentMethod'|trans({'%paymentMethod%': order.transactions.first.paymentMethod.name})|sw_sanitize }}
+                            {{ 'document.paymentShippingInfo.paymentMethod'|trans({'%paymentMethod%': order.transactions.first.paymentMethod.name})|sw_sanitize }}<br>
                         {% endblock %}
                         {% block document_shipping %}
-                            {{ 'document.paymentShippingInfo.shippingMethod'|trans({'%shippingMethod%': order.deliveries.first.shippingMethod.name})|sw_sanitize }}<br>
+                            {{ 'document.paymentShippingInfo.shippingMethod'|trans({'%shippingMethod%': order.deliveries.first.shippingMethod.name})|sw_sanitize }}<br><br>
                         {% endblock %}
                         {% block document_payment_shipping_additional %}
                             {{ 'document.paymentShippingInfo.additionalInfo'|trans|sw_sanitize }}<br>
